@@ -3,7 +3,7 @@
 
 #include <ivp_physics.hxx>
 
-#if defined(LINUX) || defined(SUN) || (__MWERKS__ && __POWERPC__)
+#if defined(LINUX) || defined(SUN) || (__MWERKS__ && __POWERPC__) || defined (APPLE) && defined (_X86_)
 #	include <alloca.h>
 #endif
 
@@ -86,7 +86,7 @@ IVP_Contact_Point::IVP_Contact_Point( IVP_Mindist *md)
 		    (long)syn0->l_obj->physical_core,
 		    (long)syn0->l_obj->physical_core);
 	}
-    }
+    };
     if ( syn1->get_status() == IVP_ST_TRIANGLE){
 	const IVP_Compact_Edge *e1 = syn1->edge;
 	IVP_U_Point wHesse_vecF_Fos;
