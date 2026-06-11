@@ -632,13 +632,18 @@ void IVP_Constraint_Local::do_simulation_controller(IVP_Event_Sim *es,IVP_U_Vect
     int aligned_row_len = mg_impulse_f_dvRA.aligned_row_len;
     mg_impulse_f_dvRA.MATRIX_EPS = 1E-9f;
     IVP_ASSERT( aligned_row_len <= 8 );
+#if defined (IVP_NO_ALLOCA)
     IVP_DOUBLE matrix_values_buffer[ 6 * 8 + 3 ];
     IVP_DOUBLE result_vector_buffer[ 8 ];
     IVP_DOUBLE desired_vector_buffer[ 8 ];
     mg_impulse_f_dvRA.matrix_values = (IVP_DOUBLE *) &matrix_values_buffer[0];
     mg_impulse_f_dvRA.result_vector = (IVP_DOUBLE *) &result_vector_buffer[0];
     mg_impulse_f_dvRA.desired_vector = (IVP_DOUBLE *) &desired_vector_buffer[0];
-
+#else
+	mg_impulse_f_dvRA.matrix_values = (IVP_DOUBLE *) alloca((matrix_size * aligned_row_len + IVP_VECFPU_SIZE - 1) * sizeof(IVP_DOUBLE));
+	mg_impulse_f_dvRA.result_vector = (IVP_DOUBLE *) alloca(aligned_row_len * sizeof(IVP_DOUBLE));
+	mg_impulse_f_dvRA.desired_vector = (IVP_DOUBLE *) alloca(aligned_row_len * sizeof(IVP_DOUBLE));
+#endif
     //align matrix_values
     mg_impulse_f_dvRA.align_matrix_values();
     

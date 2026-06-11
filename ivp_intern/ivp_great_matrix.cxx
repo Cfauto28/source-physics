@@ -7,7 +7,7 @@
 
 #include <ivp_physics.hxx>
 
-#if defined(LINUX) || defined(SUN) || (__MWERKS__ && __POWERPC__) || defined (OSX)
+#if defined(LINUX) || defined(SUN) || (__MWERKS__ && __POWERPC__)
 #	include <alloca.h>
 #endif
 #include <ivp_great_matrix.hxx>
@@ -2132,9 +2132,12 @@ IVP_RETURN_TYPE IVP_Great_Matrix_Many_Zero::invert(IVP_Great_Matrix_Many_Zero *d
     
     IVP_ASSERT(dest->columns == this->columns);
 
+#if defined (IVP_NO_ALLOCA)
     int index_vec[IVP_MAX_GREAT_MATRIX_SIZE];
     IVP_ASSERT( columns < IVP_MAX_GREAT_MATRIX_SIZE);
-
+#else
+	int *index_vec=(int*)alloca( columns*sizeof(IVP_DOUBLE) );
+#endif
     IVP_DOUBLE sign;
 
     if( lu_crout(index_vec,&sign) == IVP_FAULT ) {

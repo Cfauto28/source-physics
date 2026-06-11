@@ -303,7 +303,9 @@ extern void ivp_memory_check(void *a);
 void ivp_srand(int seed);
 IVP_FLOAT ivp_rand();		// returns [0 .. 1]
 
-#define IVP_NO_ALLOCA
+#if defined (PSXII) || defined (OSX)
+	#define IVP_NO_ALLOCA
+#endif
 
 #if defined(WIN32)
 #   if defined(IVP_PIII) || defined(IVP_WILLAMETTE)
